@@ -1,13 +1,12 @@
 package com.example.recipebook.ui.recipelist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.example.recipebook.data.Recipe
 import com.example.recipebook.data.RecipeDao
 import java.lang.IllegalArgumentException
 
 class RecipeListViewModel(private val recipeDao: RecipeDao): ViewModel() {
+    val allRecipes: LiveData<List<Recipe>> = recipeDao.getAllRecipe().asLiveData()
 
 }
 
