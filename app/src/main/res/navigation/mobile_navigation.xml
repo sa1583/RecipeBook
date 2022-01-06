@@ -3,23 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/recipeListFragment">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/recipeListFragment"
         android:name="com.example.recipebook.ui.recipelist.RecipeListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_recipe_list" />
+        tools:layout="@layout/fragment_recipe_list" >
+        <action
+            android:id="@+id/action_recipe_list_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment" />
+        <action
+            android:id="@+id/action_recipe_list_to_add_recipe"
+            app:destination="@id/addRecipeFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/recipeDetailFragment"
         android:name="com.example.recipebook.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <argument
+            android:name="recipe_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_recipe_detail_to_add_recipe"
+            app:destination="@id/addRecipeFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/addRecipeFragment"
         android:name="com.example.recipebook.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_add_recipe_to_recipe_list"
+            app:destination="@id/recipeListFragment" />
+    </fragment>
 </navigation>
