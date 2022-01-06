@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipebook.RecipeApplication
+import com.example.recipebook.RecipeListAdapter
 import com.example.recipebook.databinding.FragmentRecipeListBinding
 
 class RecipeListFragment : Fragment() {
@@ -25,6 +28,22 @@ class RecipeListFragment : Fragment() {
     ): View {
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val adapter = RecipeListAdapter {
+            val action = RecipeListFragmentDirections.actionRecipeListToRecipeDetail(it.id)
+            this.findNavController().navigate(action)
+        }
+        binding.recipeList.adapter = adapter
+        viewModel.allRecipes.observe(this.viewLifecycleOwner) { recipes ->
+            recipes.let {
+                adapter.submitList(it)
+            }
+        }
+        binding.recipeList.layoutManager = LinearLayoutManager(this.context)
+
     }
 
     override fun onDestroyView() {
