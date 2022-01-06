@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/activity_main.xml" value="0.315625" />
+        <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/fragment_recipe_list.xml" value="0.5370370370370371" />
+        <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/recipe_list_item.xml" value="0.5370370370370371" />
       </map>
     </option>
   </component>
