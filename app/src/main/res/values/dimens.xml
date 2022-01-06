@@ -5,4 +5,7 @@
     <dimen name="recipe_list_image_margin">8dp</dimen>
     <dimen name="recipe_list_name_margin_start">16dp</dimen>
     <dimen name="recipe_list_image_size">50dp</dimen>
+    <dimen name="recipe_detail_margin">8dp</dimen>
+    <dimen name="margin">16dp</dimen>
+    <dimen name="ingredient_item_list_height">32dp</dimen>
 </resources>
