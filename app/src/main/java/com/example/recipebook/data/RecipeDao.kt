@@ -12,18 +12,21 @@ interface RecipeDao {
     @Query("SELECT * FROM recipe WHERE id = :id")
     fun getRecipeWithIngredients(id: Int): Flow<RecipeWithIngredients>
 
-    @Transaction
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addRecipe(recipeWithIngredients: RecipeWithIngredients)
+    suspend fun addRecipe(recipe: Recipe)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addIngredient(ingredient: Ingredient)
 
-    @Transaction
     @Update
-    suspend fun updateRecipe(recipeWithIngredients: RecipeWithIngredients)
+    suspend fun updateRecipe(recipe: Recipe)
 
-    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addIngredients(ingredients: List<Ingredient>)
+
     @Delete
-    suspend fun deleteRecipe(recipeWithIngredients: RecipeWithIngredients)
+    suspend fun deleteRecipe(recipe: Recipe)
+
+    @Delete
+    suspend fun deleteIngredients(ingredients: List<Ingredient>)
 }

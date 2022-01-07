@@ -22,7 +22,7 @@ data class RecipeWithIngredients(
     @Embedded val recipe: Recipe,
     @Relation(
         parentColumn = "id",
-        entityColumn = "recipeId"
+        entityColumn = "recipe_id"
     )
     val ingredientList: List<Ingredient>
 )
