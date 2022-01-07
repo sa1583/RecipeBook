@@ -43,7 +43,10 @@ class RecipeListFragment : Fragment() {
             }
         }
         binding.recipeList.layoutManager = LinearLayoutManager(this.context)
-
+        binding.addRecipeFloatingButton.setOnClickListener {
+            val action = RecipeListFragmentDirections.actionRecipeListToAddRecipe()
+            this.findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {
