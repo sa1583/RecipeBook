@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Recipe::class, Ingredient::class, RecipeWithIngredients::class],
+    entities = [Recipe::class, Ingredient::class],
     version = 1,
     exportSchema = false
 )
