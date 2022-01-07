@@ -20,22 +20,22 @@
 
     <fragment
         android:id="@+id/recipeDetailFragment"
-        android:name="com.example.recipebook.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
-        <argument
-            android:name="recipe_id"
-            app:argType="integer" />
+        android:name="com.example.recipebook.ui.recipedetail.RecipeDetailFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_recipe_detail">
         <action
             android:id="@+id/action_recipe_detail_to_add_recipe"
             app:destination="@id/addRecipeFragment" />
+        <argument
+            android:name="recipe_id"
+            app:argType="integer" />
     </fragment>
 
     <fragment
         android:id="@+id/addRecipeFragment"
-        android:name="com.example.recipebook.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" >
+        android:name="com.example.recipebook.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_add_recipe_to_recipe_list"
             app:destination="@id/recipeListFragment" />
