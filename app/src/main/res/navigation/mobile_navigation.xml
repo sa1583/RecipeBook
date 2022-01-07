@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/recipeListFragment">
+
+    <fragment
+        android:id="@+id/recipeListFragment"
+        android:name="com.example.recipebook.ui.recipelist.RecipeListFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_recipe_list" >
+        <action
+            android:id="@+id/action_recipe_list_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment" />
+        <action
+            android:id="@+id/action_recipe_list_to_add_recipe"
+            app:destination="@id/addRecipeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipeDetailFragment"
+        android:name="com.example.recipebook.ui.recipedetail.RecipeDetailFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_recipe_detail">
+        <action
+            android:id="@+id/action_recipe_detail_to_add_recipe"
+            app:destination="@id/addRecipeFragment" />
+        <argument
+            android:name="recipe_id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.example.recipebook.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_add_recipe_to_recipe_list"
+            app:destination="@id/recipeListFragment" />
+    </fragment>
+</navigation>
