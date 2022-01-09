@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/recipeListFragment"
-        android:name="com.example.recipebook.ui.recipelist.RecipeListFragment"
+        android:name="com.example.recipebook.ui.list.RecipeListFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_recipe_list" >
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/recipeDetailFragment"
-        android:name="com.example.recipebook.ui.recipedetail.RecipeDetailFragment"
+        android:name="com.example.recipebook.ui.detail.RecipeDetailFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_recipe_detail">
         <action
@@ -33,9 +33,9 @@
 
     <fragment
         android:id="@+id/addRecipeFragment"
-        android:name="com.example.recipebook.ui.dashboard.DashboardFragment"
+        android:name="com.example.recipebook.ui.add.AddRecipeFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard">
+        tools:layout="@layout/fragment_add_recipe">
         <action
             android:id="@+id/action_add_recipe_to_recipe_list"
             app:destination="@id/recipeListFragment" />

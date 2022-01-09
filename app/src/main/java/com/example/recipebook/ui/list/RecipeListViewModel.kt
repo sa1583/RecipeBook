@@ -1,4 +1,4 @@
-package com.example.recipebook.ui.recipelist
+package com.example.recipebook.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

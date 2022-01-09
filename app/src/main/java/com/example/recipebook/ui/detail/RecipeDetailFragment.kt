@@ -1,4 +1,4 @@
-package com.example.recipebook.ui.recipedetail
+package com.example.recipebook.ui.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
