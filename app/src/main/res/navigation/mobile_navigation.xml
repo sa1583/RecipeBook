@@ -39,5 +39,8 @@
         <action
             android:id="@+id/action_add_recipe_to_recipe_list"
             app:destination="@id/recipeListFragment" />
+        <argument
+            android:name="id"
+            android:defaultValue="-1" />
     </fragment>
 </navigation>
