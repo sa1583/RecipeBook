@@ -7,6 +7,22 @@
     android:layout_margin="@dimen/margin"
     tools:context=".ui.add.AddRecipeFragment">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/recipe_name_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/recipe_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:hint="@string/recipe_name_description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ImageView
         android:id="@+id/recipe_image"
         android:layout_width="150dp"
@@ -16,30 +32,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipe_name_label"
-        tools:src="@drawable/ic_recipe_image_default" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/recipe_name_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/recipe_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:src="@drawable/ic_recipe_image_default" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredients_list"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
         app:layout_constraintTop_toBottomOf="@+id/recipe_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <include
+        android:id="@+id/add_ingredient"
+        layout="@layout/add_ingredient_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients_list" />
+
+    <Button
+        android:id="@+id/btn_add_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_recipe"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
