@@ -13,7 +13,7 @@ interface RecipeDao {
     fun getRecipeWithIngredients(id: Int): Flow<RecipeWithIngredients>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addRecipe(recipe: Recipe)
+    suspend fun addRecipe(recipe: Recipe): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addIngredient(ingredient: Ingredient)
