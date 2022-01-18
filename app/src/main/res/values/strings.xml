@@ -11,4 +11,5 @@
     <string name="btn_add_ingredient_text">add ingredient</string>
     <string name="add_recipe">add recipe</string>
     <string name="add_ingredient_button">add ingredient button</string>
+    <string name="modify_recipe">modify recipe</string>
 </resources>

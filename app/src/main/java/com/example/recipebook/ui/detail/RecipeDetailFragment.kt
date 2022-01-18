@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipebook.IngredientListAdapter
@@ -43,6 +44,10 @@ class RecipeDetailFragment : Fragment() {
         viewModel.retrieveRecipe(id).observe(this.viewLifecycleOwner) { selectedRecipe ->
             recipeWithIngredients = selectedRecipe
             bind(recipeWithIngredients)
+        }
+        binding.btnModifyRecipe.setOnClickListener {
+            val action = RecipeDetailFragmentDirections.actionRecipeDetailToAddRecipe(id)
+            findNavController().navigate(action)
         }
     }
 

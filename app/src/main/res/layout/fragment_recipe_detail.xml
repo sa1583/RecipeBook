@@ -6,34 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".ui.detail.RecipeDetailFragment">
 
+    <ImageView
+        android:id="@+id/recipe_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="@dimen/margin"
+        android:contentDescription="@string/image_recipe_description"
+        app:layout_constraintBottom_toTopOf="@+id/ingredients_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_name"
+        tools:src="@drawable/ic_recipe_image_default" />
+
     <TextView
         android:id="@+id/recipe_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/recipe_image"
-        tools:text="recipe name"/>
-
-    <ImageView
-        android:id="@+id/recipe_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="@dimen/margin"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_name"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/ingredients_list"
-        tools:src="@drawable/ic_recipe_image_default" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="recipe name" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredients_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_image"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_image" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_modify_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/modify_recipe"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
