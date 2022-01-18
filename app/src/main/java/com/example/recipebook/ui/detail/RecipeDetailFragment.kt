@@ -1,12 +1,15 @@
 package com.example.recipebook.ui.detail
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipebook.IngredientListAdapter
 import com.example.recipebook.RecipeApplication
 import com.example.recipebook.data.RecipeWithIngredients
@@ -35,6 +38,7 @@ class RecipeDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.ingredientsList.adapter = IngredientListAdapter()
+        binding.ingredientsList.layoutManager = LinearLayoutManager(this.context)
         val id = navigationArs.recipeId
         viewModel.retrieveRecipe(id).observe(this.viewLifecycleOwner) { selectedRecipe ->
             recipeWithIngredients = selectedRecipe
@@ -48,9 +52,13 @@ class RecipeDetailFragment : Fragment() {
     }
 
     private fun bind(recipeWithIngredients: RecipeWithIngredients) {
+        val adapter = IngredientListAdapter()
+        val ingredients = viewModel.ingredientDBsToIngredients(recipeWithIngredients.ingredientDBList)
         binding.apply {
             recipeName.text = recipeWithIngredients.recipe.recipeName
-            // recipeImage.setImageResource(recipeWithIngredients.recipe.recipeImage)
+            recipeImage.setImageURI(Uri.parse(recipeWithIngredients.recipe.recipeImageUri))
+            ingredientsList.adapter = adapter
+            adapter.submitList(ingredients)
         }
     }
 }

@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/recipeDetailFragment"
         android:name="com.example.recipebook.ui.detail.RecipeDetailFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_detail"
         tools:layout="@layout/fragment_recipe_detail">
         <action
             android:id="@+id/action_recipe_detail_to_add_recipe"
