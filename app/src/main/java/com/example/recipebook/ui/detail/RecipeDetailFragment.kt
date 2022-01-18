@@ -50,7 +50,7 @@ class RecipeDetailFragment : Fragment() {
     private fun bind(recipeWithIngredients: RecipeWithIngredients) {
         binding.apply {
             recipeName.text = recipeWithIngredients.recipe.recipeName
-            recipeImage.setImageResource(recipeWithIngredients.recipe.recipeImage)
+            // recipeImage.setImageResource(recipeWithIngredients.recipe.recipeImage)
         }
     }
 }

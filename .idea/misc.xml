@@ -4,11 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/activity_main.xml" value="0.315625" />
+        <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/add_ingredient_list_item.xml" value="0.5451282051282051" />
+        <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/fragment_add_recipe.xml" value="0.5" />
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/fragment_dashboard.xml" value="0.5536458333333333" />
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/fragment_notifications.xml" value="0.5536458333333333" />
+        <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/fragment_recipe_detail.xml" value="0.5451282051282051" />
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/fragment_recipe_list.xml" value="0.5370370370370371" />
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/ingredient_list_item.xml" value="0.5451282051282051" />
         <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/layout/recipe_list_item.xml" value="0.5370370370370371" />
+        <entry key="..\:/Users/sa158/Android/RecipeBook/app/src/main/res/menu/bottom_nav_menu.xml" value="0.32760416666666664" />
       </map>
     </option>
   </component>

@@ -28,7 +28,7 @@
             app:destination="@id/addRecipeFragment" />
         <argument
             android:name="recipe_id"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
 
     <fragment
@@ -41,6 +41,7 @@
             app:destination="@id/recipeListFragment" />
         <argument
             android:name="id"
-            android:defaultValue="-1" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 </navigation>

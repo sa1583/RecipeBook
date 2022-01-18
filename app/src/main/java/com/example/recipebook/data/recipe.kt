@@ -1,19 +1,18 @@
 package com.example.recipebook.data
 
-import android.net.Uri
 import androidx.room.*
 
 @Entity(tableName = "recipe")
 data class Recipe(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "name") val recipeName: String,
-    @ColumnInfo(name = "image") val recipeImage: Uri
+    @ColumnInfo(name = "image") val recipeImageUri: String
 )
 
 @Entity(tableName = "Ingredient")
-data class Ingredient(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "recipe_id") val recipeId: Int,
+data class IngredientDB(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "recipe_id") val recipeId: Long,
     @ColumnInfo(name = "name") val ingredientName: String,
     @ColumnInfo(name = "amount") val ingredientAmount: Int,
     @ColumnInfo(name = "unit") val ingredientUnit: Int
@@ -25,7 +24,7 @@ data class RecipeWithIngredients(
         parentColumn = "id",
         entityColumn = "recipe_id"
     )
-    val ingredientList: List<Ingredient>
+    val ingredientDBList: List<IngredientDB>
 )
 
 
