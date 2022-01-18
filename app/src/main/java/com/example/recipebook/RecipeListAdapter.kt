@@ -1,5 +1,6 @@
 package com.example.recipebook
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,7 +16,7 @@ class RecipeListAdapter(private val onItemClicked: (Recipe) -> Unit) :
         fun bind(recipe: Recipe) {
             binding.apply {
                 recipeName.text = recipe.recipeName
-                // recipeImage.setImageResource(recipe.recipeImage)
+                recipeImage.setImageURI(Uri.parse(recipe.recipeImageUri))
             }
         }
     }
