@@ -1,4 +1,4 @@
-package com.example.recipebook.ui.recipedetail
+package com.example.recipebook.ui.detail
 
 import androidx.lifecycle.*
 import com.example.recipebook.data.RecipeDao
@@ -7,7 +7,7 @@ import java.lang.IllegalArgumentException
 
 class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
 
-    fun retrieveRecipe(id: Int): LiveData<RecipeWithIngredients> {
+    fun retrieveRecipe(id: Long): LiveData<RecipeWithIngredients> {
         return recipeDao.getRecipeWithIngredients(id).asLiveData()
     }
 }

@@ -15,7 +15,7 @@ class RecipeListAdapter(private val onItemClicked: (Recipe) -> Unit) :
         fun bind(recipe: Recipe) {
             binding.apply {
                 recipeName.text = recipe.recipeName
-                recipeImage.setImageResource(recipe.recipeImage)
+                // recipeImage.setImageResource(recipe.recipeImage)
             }
         }
     }

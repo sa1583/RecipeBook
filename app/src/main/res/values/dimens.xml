@@ -8,4 +8,5 @@
     <dimen name="recipe_detail_margin">8dp</dimen>
     <dimen name="margin">16dp</dimen>
     <dimen name="ingredient_item_list_height">32dp</dimen>
+    <dimen name="add_button_size">60dp</dimen>
 </resources>

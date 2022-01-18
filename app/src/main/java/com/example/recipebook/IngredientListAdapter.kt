@@ -1,5 +1,6 @@
 package com.example.recipebook
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,27 +9,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipebook.data.Ingredient
 import com.example.recipebook.databinding.IngredientListItemBinding
 
-class IngredientListAdapter() :
+class IngredientListAdapter :
     ListAdapter<Ingredient, IngredientListAdapter.IngredientViewHolder>(DiffCallback) {
 
     class IngredientViewHolder(private var binding: IngredientListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(ingredient: Ingredient) {
+        fun bind(ingredient: Ingredient, resources: Resources) {
             binding.apply {
-                ingredientName.text = ingredient.ingredientName
-                ingredientAmount.text = ingredient.ingredientAmount.toString()
-                ingredientAmountUnit.text = ingredient.ingredientUnit
+                ingredientName.text = ingredient.name
+                ingredientAmount.text = ingredient.amount.toString()
+                ingredientAmountUnit.text = resources.getStringArray(R.array.unitList)[ingredient.unit]
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientListAdapter.IngredientViewHolder {
-        return IngredientListAdapter.IngredientViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
+        return IngredientViewHolder(
             IngredientListItemBinding.inflate(LayoutInflater.from(parent.context))
         )
     }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val resources = holder.itemView.resources
+        holder.bind(getItem(position), resources)
     }
 
     companion object {
@@ -38,7 +40,7 @@ class IngredientListAdapter() :
             }
 
             override fun areContentsTheSame(oldItem: Ingredient, newItem: Ingredient): Boolean {
-                return oldItem.ingredientName == newItem.ingredientName
+                return oldItem.name == newItem.name
             }
         }
     }

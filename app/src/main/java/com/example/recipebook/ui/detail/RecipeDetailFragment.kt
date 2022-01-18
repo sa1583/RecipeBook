@@ -1,4 +1,4 @@
-package com.example.recipebook.ui.recipedetail
+package com.example.recipebook.ui.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -50,7 +50,7 @@ class RecipeDetailFragment : Fragment() {
     private fun bind(recipeWithIngredients: RecipeWithIngredients) {
         binding.apply {
             recipeName.text = recipeWithIngredients.recipe.recipeName
-            recipeImage.setImageResource(recipeWithIngredients.recipe.recipeImage)
+            // recipeImage.setImageResource(recipeWithIngredients.recipe.recipeImage)
         }
     }
 }
