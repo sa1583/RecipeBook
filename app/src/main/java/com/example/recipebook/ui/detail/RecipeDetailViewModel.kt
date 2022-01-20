@@ -25,7 +25,7 @@ class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     fun ingredientDBsToIngredients(ingredientDBs: List<IngredientDB>): List<Ingredient> {
         val ingredients = mutableListOf<Ingredient>()
         for (ingredientDB in ingredientDBs) {
-            Log.d("RecipeDetailViewModel", "${ingredientDB.id} ${ingredientDB.ingredientName}")
+            // Log.d("RecipeDetailViewModel", "${ingredientDB.id} ${ingredientDB.ingredientName}")
             ingredients.add(
                 getIngredient(
                     ingredientDB.recipeId,
@@ -35,7 +35,7 @@ class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
                 )
             )
         }
-        Log.d("RecipeDetailViewModel", ingredients.size.toString())
+        // Log.d("RecipeDetailViewModel", ingredients.size.toString())
         return ingredients
     }
 }
