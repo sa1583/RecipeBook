@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RecipeBook</string>
     <string name="title_home">레시피 목록</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_add">레시피 추가</string>
     <string name="title_detail">레시피 정보</string>
     <string name="image_recipe_description">recipe image</string>
     <string name="add_recipe_floating_button">add new recipe</string>

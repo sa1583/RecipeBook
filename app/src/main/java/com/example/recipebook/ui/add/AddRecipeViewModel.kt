@@ -1,6 +1,7 @@
 package com.example.recipebook.ui.add
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.recipebook.data.*
 import kotlinx.coroutines.launch
@@ -20,9 +21,8 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     fun addIngredients(ingredientDBList: List<IngredientDB>) {
         for (ingredientDB in ingredientDBList) {
             val ingredient = ingredientDBToIngredient(ingredientDB)
-            ingredients.add(ingredient)
+            addIngredient(ingredient)
         }
-        _ingredientList.value = ingredients
     }
 
     private fun addIngredient(ingredient: Ingredient) {
@@ -30,8 +30,8 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         _ingredientList.value = ingredients
     }
 
-    fun removeIngredient(ingredient: Ingredient) {
-        ingredients.remove(ingredient)
+    fun removeIngredients() {
+        ingredients.clear()
         _ingredientList.value = ingredients
     }
 
@@ -57,8 +57,9 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         )
     }
 
-    private fun getNewRecipe(recipeName: String, recipeImage: String): Recipe {
+    private fun getNewRecipe(id: Long, recipeName: String, recipeImage: String): Recipe {
         return Recipe(
+            id = id,
             recipeName = recipeName,
             recipeImageUri = recipeImage
         )
@@ -99,8 +100,16 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         recipeName: String,
         recipeImageUri: String
     ) {
-        val recipe = getNewRecipe(recipeName, recipeImageUri)
+        val recipe = getNewRecipe(0L, recipeName, recipeImageUri)
         insertRecipeAndIngredient(recipe)
+    }
+
+    fun modifyRecipe(recipeId: Long, recipeName: String, recipeImageUri: String) {
+        val updatedRecipe = getNewRecipe(recipeId, recipeName, recipeImageUri)
+        viewModelScope.launch {
+            recipeDao.updateRecipe(updatedRecipe)
+        }
+
     }
 
     fun addNewIngredient(name: String, amount: Int, unit: Int) {

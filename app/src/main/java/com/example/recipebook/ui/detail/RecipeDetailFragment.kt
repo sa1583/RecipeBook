@@ -46,7 +46,7 @@ class RecipeDetailFragment : Fragment() {
             bind(recipeWithIngredients)
         }
         binding.btnModifyRecipe.setOnClickListener {
-            val action = RecipeDetailFragmentDirections.actionRecipeDetailToAddRecipe(id)
+            val action = RecipeDetailFragmentDirections.actionRecipeDetailToAddRecipe(id, "수정")
             findNavController().navigate(action)
         }
     }
