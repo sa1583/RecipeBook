@@ -2,6 +2,7 @@ package com.example.recipebook.ui.add
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -65,7 +67,6 @@ class AddRecipeFragment : Fragment() {
         val id: Long = navigationArgs.id
         if (id > 0) {
             mode = Mode.MODIFY
-
             binding.btnAddRecipe.text = resources.getString(R.string.modify_recipe)
             viewModel.retrieveRecipeWithIngredients(id).observe(this.viewLifecycleOwner) { recipeWithIngredients ->
                 selectedRecipe = recipeWithIngredients.recipe
@@ -82,7 +83,16 @@ class AddRecipeFragment : Fragment() {
                 binding.addIngredient.ingredientAmountUnit.adapter = adapter
             }
         // 재료 리스트
-        val adapter = IngredientListAdapter()
+        val adapter = IngredientListAdapter {
+            val builder = context?.let { it1 -> AlertDialog.Builder(it1) }
+            builder!!.setMessage(R.string.dialog_remove_ingredient)
+                .setPositiveButton(R.string.dialog_positive) { _, _ ->
+                    viewModel.removeIngredient(it)
+                }
+                .setNegativeButton("취소", null)
+                .create()
+            builder.show()
+        }
         binding.ingredientsList.adapter = adapter
         viewModel.ingredientList.observe(this.viewLifecycleOwner) { ingredients ->
             ingredients.let {
@@ -113,6 +123,8 @@ class AddRecipeFragment : Fragment() {
             this.findNavController().navigate(action)
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

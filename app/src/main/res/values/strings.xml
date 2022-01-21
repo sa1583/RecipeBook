@@ -12,4 +12,7 @@
     <string name="add_recipe">add recipe</string>
     <string name="add_ingredient_button">add ingredient button</string>
     <string name="modify_recipe">modify recipe</string>
+    <string name="dialog_remove_ingredient">재료를 삭제하시겠습니까?</string>
+    <string name="dialog_positive">확인</string>
+    <string name="dialog_negative">취소</string>
 </resources>

@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import java.time.temporal.TemporalAmount
 
 class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
+    // TODO: 재료목록이 실시간으로 업데이트 되지 않음
     private val ingredients = mutableListOf<Ingredient>()
     private val _ingredientList = MutableLiveData<List<Ingredient>>()
     val ingredientList: LiveData<List<Ingredient>> = _ingredientList
@@ -32,6 +33,11 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
 
     fun removeIngredients() {
         ingredients.clear()
+        _ingredientList.value = ingredients
+    }
+
+    fun removeIngredient(ingredient: Ingredient) {
+        ingredients.remove(ingredient)
         _ingredientList.value = ingredients
     }
 
@@ -88,7 +94,23 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         viewModelScope.launch {
             val id = recipeDao.addRecipe(recipe)
             val ingredientDBs = setIngredientsRecipeId(id)
-            recipeDao.addIngredients(ingredientDBs)
+            addAndUpdateIngredients(ingredientDBs)
+        }
+    }
+
+    private fun addAndUpdateIngredients(ingredientDBs: List<IngredientDB>) {
+        val newIngredientDBs = mutableListOf<IngredientDB>()
+        val updateIngredientDBs = mutableListOf<IngredientDB>()
+        for (ingredient in ingredientDBs) {
+            if (ingredient.id == 0L) {
+                newIngredientDBs.add(ingredient)
+            } else {
+                updateIngredientDBs.add(ingredient)
+            }
+        }
+        viewModelScope.launch {
+            recipeDao.addIngredients(newIngredientDBs)
+            recipeDao.updateIngredients(updateIngredientDBs)
         }
     }
 
