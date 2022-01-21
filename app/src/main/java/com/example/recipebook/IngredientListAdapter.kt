@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipebook.data.Ingredient
 import com.example.recipebook.databinding.IngredientListItemBinding
 
-class IngredientListAdapter :
+class IngredientListAdapter(private val onItemClicked: (Ingredient) -> (Unit)) :
     ListAdapter<Ingredient, IngredientListAdapter.IngredientViewHolder>(DiffCallback) {
 
     class IngredientViewHolder(private var binding: IngredientListItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -30,7 +30,11 @@ class IngredientListAdapter :
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val resources = holder.itemView.resources
-        holder.bind(getItem(position), resources)
+        val current = getItem(position)
+        holder.itemView.setOnClickListener {
+            onItemClicked(current)
+        }
+        holder.bind(current, resources)
     }
 
     companion object {
