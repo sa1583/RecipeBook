@@ -1,14 +1,13 @@
 package com.example.recipebook.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.recipebook.data.Ingredient
-import com.example.recipebook.data.IngredientDB
-import com.example.recipebook.data.RecipeDao
-import com.example.recipebook.data.RecipeWithIngredients
-import java.lang.IllegalArgumentException
+import com.example.recipebook.data.*
 
 class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
+    init {
+
+    }
+
     private fun getIngredient(recipeId: Long, name: String, amount: Int, unit: Int): Ingredient {
         return Ingredient(
             recipeId = recipeId,

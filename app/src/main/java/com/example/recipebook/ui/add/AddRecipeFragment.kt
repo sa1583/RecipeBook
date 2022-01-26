@@ -2,7 +2,6 @@ package com.example.recipebook.ui.add
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -25,8 +24,10 @@ import com.example.recipebook.IngredientListAdapter
 import com.example.recipebook.MainActivity
 import com.example.recipebook.R
 import com.example.recipebook.RecipeApplication
+import com.example.recipebook.data.Ingredient
 import com.example.recipebook.data.Recipe
 import com.example.recipebook.databinding.FragmentAddRecipeBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 const val PERMISSION_REQUEST_READ_STORAGE = 0
 
@@ -65,12 +66,13 @@ class AddRecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Recipe 수정 시 id로 세팅
         val id: Long = navigationArgs.id
-        if (id > 0) {
+        if (id > 0L) {
             mode = Mode.MODIFY
             binding.btnAddRecipe.text = resources.getString(R.string.modify_recipe)
             viewModel.retrieveRecipeWithIngredients(id).observe(this.viewLifecycleOwner) { recipeWithIngredients ->
                 selectedRecipe = recipeWithIngredients.recipe
                 bind()
+                setRecyclerView()
                 viewModel.addIngredients(recipeWithIngredients.ingredientDBList)
             }
         }
@@ -82,49 +84,7 @@ class AddRecipeFragment : Fragment() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.addIngredient.ingredientAmountUnit.adapter = adapter
             }
-        // 재료 리스트
-        val adapter = IngredientListAdapter {
-            val builder = context?.let { it1 -> AlertDialog.Builder(it1) }
-            builder!!.setMessage(R.string.dialog_remove_ingredient)
-                .setPositiveButton(R.string.dialog_positive) { _, _ ->
-                    viewModel.removeIngredient(it)
-                }
-                .setNegativeButton("취소", null)
-                .create()
-            builder.show()
-        }
-        binding.ingredientsList.adapter = adapter
-        viewModel.ingredientList.observe(this.viewLifecycleOwner) { ingredients ->
-            ingredients.let {
-                adapter.submitList(it)
-            }
-        }
-        // layout manager
-        binding.ingredientsList.layoutManager = LinearLayoutManager(this.context)
-        // 이미지 추가
-        binding.recipeImage.setOnClickListener { checkPermission() }
-        // 재료 추가
-        binding.addIngredient.btnAddIngredient.setOnClickListener {
-            val ingredientName = binding.addIngredient.ingredientName.text.toString()
-            val ingredientAmount = binding.addIngredient.ingredientAmount.text.toString().toInt()
-            val ingredientUnit = binding.addIngredient.ingredientAmountUnit.selectedItemId.toInt()
-            viewModel.addNewIngredient(ingredientName, ingredientAmount, ingredientUnit)
-        }
-        // 레시피 추가
-        binding.btnAddRecipe.setOnClickListener {
-            val recipeName = binding.recipeName.text.toString()
-            val recipeImageUri = viewModel.imageUri
-            if (mode == Mode.ADD) {
-                viewModel.addNewRecipe(recipeName, recipeImageUri)
-            } else {
-                viewModel.modifyRecipe(selectedRecipe!!.id, recipeName, recipeImageUri)
-            }
-            val action = AddRecipeFragmentDirections.actionAddRecipeToRecipeList()
-            this.findNavController().navigate(action)
-        }
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -132,10 +92,56 @@ class AddRecipeFragment : Fragment() {
         _binding = null
     }
 
+    private fun addRecipe() {
+        val recipeName = binding.recipeName.text.toString()
+        val recipeImageUri = viewModel.imageUri
+        if (mode == Mode.ADD) {
+            viewModel.addNewRecipe(recipeName, recipeImageUri)
+        } else {
+            viewModel.modifyRecipe(selectedRecipe!!.id, recipeName, recipeImageUri)
+        }
+        val action = AddRecipeFragmentDirections.actionAddRecipeToRecipeList()
+        this.findNavController().navigate(action)
+    }
+
+    private fun addIngredient() {
+        val ingredientName = binding.addIngredient.ingredientName.text.toString()
+        val ingredientAmount = binding.addIngredient.ingredientAmount.text.toString().toInt()
+        val ingredientUnit = binding.addIngredient.ingredientAmountUnit.selectedItemId.toInt()
+        viewModel.addNewIngredient(ingredientName, ingredientAmount, ingredientUnit)
+    }
+
+    private fun showConfirmationDialog(ingredient: Ingredient){
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(android.R.string.dialog_alert_title))
+            .setCancelable(false)
+            .setNegativeButton(R.string.dialog_negative) { _, _ -> }
+            .setPositiveButton(R.string.dialog_positive) { _, _ ->
+                viewModel.removeIngredient(ingredient)
+            }
+            .show()
+    }
+
     private fun bind() {
         binding.apply {
             recipeName.setText(selectedRecipe!!.recipeName, TextView.BufferType.SPANNABLE)
             recipeImage.setImageURI(Uri.parse(selectedRecipe!!.recipeImageUri))
+            ingredientsList.layoutManager = LinearLayoutManager(requireContext())
+            addIngredient.btnAddIngredient.setOnClickListener { addIngredient() }
+            recipeImage.setOnClickListener { checkPermission() }
+            btnAddRecipe.setOnClickListener { addRecipe() }
+        }
+    }
+
+    private fun setRecyclerView() {
+        val adapter = IngredientListAdapter {
+            showConfirmationDialog(it)
+        }
+        binding.ingredientsList.adapter = adapter
+        viewModel.ingredientList.observe(this.viewLifecycleOwner) { ingredients ->
+            ingredients.let {
+                adapter.submitList(it)
+            }
         }
     }
 
