@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -98,7 +97,7 @@ class AddRecipeFragment : Fragment() {
         if (mode == Mode.ADD) {
             viewModel.addNewRecipe(recipeName, recipeImageUri)
         } else {
-            viewModel.modifyRecipe(selectedRecipe!!.id, recipeName, recipeImageUri)
+            viewModel.modifyRecipe(recipeName, recipeImageUri, selectedRecipe!!.id)
         }
         val action = AddRecipeFragmentDirections.actionAddRecipeToRecipeList()
         this.findNavController().navigate(action)
@@ -109,15 +108,25 @@ class AddRecipeFragment : Fragment() {
         val ingredientAmount = binding.addIngredient.ingredientAmount.text.toString().toInt()
         val ingredientUnit = binding.addIngredient.ingredientAmountUnit.selectedItemId.toInt()
         viewModel.addNewIngredient(ingredientName, ingredientAmount, ingredientUnit)
+        setRecyclerView()
+        resetIngredient()
     }
 
-    private fun showConfirmationDialog(ingredient: Ingredient){
+    private fun resetIngredient() {
+        binding.addIngredient.ingredientName.setText("")
+        binding.addIngredient.ingredientAmount.setText("")
+        binding.addIngredient.ingredientAmountUnit.setSelection(0)
+    }
+
+    private fun showConfirmationDialog(ingredient: Ingredient) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(android.R.string.dialog_alert_title))
+            .setMessage(getString(R.string.dialog_remove_ingredient))
             .setCancelable(false)
             .setNegativeButton(R.string.dialog_negative) { _, _ -> }
             .setPositiveButton(R.string.dialog_positive) { _, _ ->
                 viewModel.removeIngredient(ingredient)
+                setRecyclerView()
             }
             .show()
     }

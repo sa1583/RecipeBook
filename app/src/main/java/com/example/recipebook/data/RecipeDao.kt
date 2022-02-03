@@ -22,9 +22,6 @@ interface RecipeDao {
     suspend fun addIngredient(ingredientDB: IngredientDB)
 
     @Update
-    suspend fun updateIngredients(ingredientDBs: List<IngredientDB>)
-
-    @Update
     suspend fun updateRecipe(recipe: Recipe)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -33,6 +30,6 @@ interface RecipeDao {
     @Delete
     suspend fun deleteRecipe(recipe: Recipe)
 
-    @Delete
-    suspend fun deleteIngredients(ingredientDBS: List<IngredientDB>)
+    @Query("DELETE FROM ingredient WHERE recipe_id = :recipeId")
+    suspend fun deleteIngredientsWithRecipeId(recipeId: Long)
 }

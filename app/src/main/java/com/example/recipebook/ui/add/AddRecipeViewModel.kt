@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import java.time.temporal.TemporalAmount
 
 class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
-    // TODO: 재료목록이 실시간으로 업데이트 되지 않음
     private val ingredients = mutableListOf<Ingredient>()
     private val _ingredientList = MutableLiveData<List<Ingredient>>()
     val ingredientList: LiveData<List<Ingredient>> = _ingredientList
@@ -94,23 +93,16 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         viewModelScope.launch {
             val id = recipeDao.addRecipe(recipe)
             val ingredientDBs = setIngredientsRecipeId(id)
-            addAndUpdateIngredients(ingredientDBs)
+            recipeDao.addIngredients(ingredientDBs)
         }
     }
 
-    private fun addAndUpdateIngredients(ingredientDBs: List<IngredientDB>) {
-        val newIngredientDBs = mutableListOf<IngredientDB>()
-        val updateIngredientDBs = mutableListOf<IngredientDB>()
-        for (ingredient in ingredientDBs) {
-            if (ingredient.id == 0L) {
-                newIngredientDBs.add(ingredient)
-            } else {
-                updateIngredientDBs.add(ingredient)
-            }
-        }
+    private fun updateRecipe(recipe: Recipe) {
         viewModelScope.launch {
-            recipeDao.addIngredients(newIngredientDBs)
-            recipeDao.updateIngredients(updateIngredientDBs)
+            recipeDao.updateRecipe(recipe)
+            val ingredientDBs = setIngredientsRecipeId(recipe.id)
+            recipeDao.deleteIngredientsWithRecipeId(recipe.id)
+            recipeDao.addIngredients(ingredientDBs)
         }
     }
 
@@ -126,12 +118,9 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         insertRecipeAndIngredient(recipe)
     }
 
-    fun modifyRecipe(recipeId: Long, recipeName: String, recipeImageUri: String) {
-        val updatedRecipe = getNewRecipe(recipeId, recipeName, recipeImageUri)
-        viewModelScope.launch {
-            recipeDao.updateRecipe(updatedRecipe)
-        }
-
+    fun modifyRecipe(recipeName: String, recipeImageUri: String, id: Long) {
+        val recipe = getNewRecipe(id, recipeName, recipeImageUri)
+        updateRecipe(recipe)
     }
 
     fun addNewIngredient(name: String, amount: Int, unit: Int) {
