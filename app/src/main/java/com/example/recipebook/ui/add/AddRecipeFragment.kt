@@ -6,12 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,11 +23,16 @@ import com.example.recipebook.IngredientListAdapter
 import com.example.recipebook.MainActivity
 import com.example.recipebook.R
 import com.example.recipebook.RecipeApplication
-import com.example.recipebook.data.RecipeWithIngredients
+import com.example.recipebook.data.Ingredient
+import com.example.recipebook.data.Recipe
 import com.example.recipebook.databinding.FragmentAddRecipeBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 const val PERMISSION_REQUEST_READ_STORAGE = 0
-const val TAG = "AddRecipeFragment"
+
+enum class Mode {
+    ADD, MODIFY
+}
 
 class AddRecipeFragment : Fragment() {
     private var _binding: FragmentAddRecipeBinding? = null
@@ -47,6 +49,8 @@ class AddRecipeFragment : Fragment() {
             viewModel.setImageUri(it.data?.data)
         }
     }
+    private var mode = Mode.ADD
+    private var selectedRecipe: Recipe? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,58 +65,92 @@ class AddRecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Recipe 수정 시 id로 세팅
         val id: Long = navigationArgs.id
-        if (id > 0) {
-            viewModel.retrieveRecipeWithIngredients(id).observe(this.viewLifecycleOwner) { selectedRecipe ->
-                bind(selectedRecipe)
-                viewModel.addIngredients(selectedRecipe.ingredientDBList)
+        if (id > 0L) {
+            mode = Mode.MODIFY
+            binding.btnAddRecipe.text = resources.getString(R.string.modify_recipe)
+            viewModel.retrieveRecipeWithIngredients(id).observe(this.viewLifecycleOwner) { recipeWithIngredients ->
+                selectedRecipe = recipeWithIngredients.recipe
+                bind()
+                setRecyclerView()
+                viewModel.addIngredients(recipeWithIngredients.ingredientDBList)
             }
         }
         // 재료 추가 스피너 설정
         ArrayAdapter.createFromResource(
-            requireContext(), R.array.unitList, android.R.layout.simple_spinner_item)
+            requireContext(), R.array.unitList, android.R.layout.simple_spinner_item
+        )
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.addIngredient.ingredientAmountUnit.adapter = adapter
             }
-        // 재료 리스트
-        val adapter = IngredientListAdapter()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.removeIngredients()
+        _binding = null
+    }
+
+    private fun addRecipe() {
+        val recipeName = binding.recipeName.text.toString()
+        val recipeImageUri = viewModel.imageUri
+        if (mode == Mode.ADD) {
+            viewModel.addNewRecipe(recipeName, recipeImageUri)
+        } else {
+            viewModel.modifyRecipe(recipeName, recipeImageUri, selectedRecipe!!.id)
+        }
+        val action = AddRecipeFragmentDirections.actionAddRecipeToRecipeList()
+        this.findNavController().navigate(action)
+    }
+
+    private fun addIngredient() {
+        val ingredientName = binding.addIngredient.ingredientName.text.toString()
+        val ingredientAmount = binding.addIngredient.ingredientAmount.text.toString().toInt()
+        val ingredientUnit = binding.addIngredient.ingredientAmountUnit.selectedItemId.toInt()
+        viewModel.addNewIngredient(ingredientName, ingredientAmount, ingredientUnit)
+        setRecyclerView()
+        resetIngredient()
+    }
+
+    private fun resetIngredient() {
+        binding.addIngredient.ingredientName.setText("")
+        binding.addIngredient.ingredientAmount.setText("")
+        binding.addIngredient.ingredientAmountUnit.setSelection(0)
+    }
+
+    private fun showConfirmationDialog(ingredient: Ingredient) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(android.R.string.dialog_alert_title))
+            .setMessage(getString(R.string.dialog_remove_ingredient))
+            .setCancelable(false)
+            .setNegativeButton(R.string.dialog_negative) { _, _ -> }
+            .setPositiveButton(R.string.dialog_positive) { _, _ ->
+                viewModel.removeIngredient(ingredient)
+                setRecyclerView()
+            }
+            .show()
+    }
+
+    private fun bind() {
+        binding.apply {
+            recipeName.setText(selectedRecipe!!.recipeName, TextView.BufferType.SPANNABLE)
+            recipeImage.setImageURI(Uri.parse(selectedRecipe!!.recipeImageUri))
+            ingredientsList.layoutManager = LinearLayoutManager(requireContext())
+            addIngredient.btnAddIngredient.setOnClickListener { addIngredient() }
+            recipeImage.setOnClickListener { checkPermission() }
+            btnAddRecipe.setOnClickListener { addRecipe() }
+        }
+    }
+
+    private fun setRecyclerView() {
+        val adapter = IngredientListAdapter {
+            showConfirmationDialog(it)
+        }
         binding.ingredientsList.adapter = adapter
         viewModel.ingredientList.observe(this.viewLifecycleOwner) { ingredients ->
             ingredients.let {
                 adapter.submitList(it)
             }
-        }
-        // layout manager
-        binding.ingredientsList.layoutManager = LinearLayoutManager(this.context)
-        // 이미지 추가
-        binding.recipeImage.setOnClickListener { checkPermission() }
-        // 재료 추가
-        binding.addIngredient.btnAddIngredient.setOnClickListener {
-            val ingredientName = binding.addIngredient.ingredientName.text.toString()
-            val ingredientAmount = binding.addIngredient.ingredientAmount.text.toString().toInt()
-            val ingredientUnit = binding.addIngredient.ingredientAmountUnit.selectedItemId.toInt()
-            viewModel.addNewIngredient(ingredientName, ingredientAmount, ingredientUnit)
-        }
-        // 레시피 추가
-        binding.btnAddRecipe.setOnClickListener {
-            val recipeName = binding.recipeName.text.toString()
-            val recipeImageUri = viewModel.imageUri
-            viewModel.addNewRecipe(recipeName, recipeImageUri)
-            val action = AddRecipeFragmentDirections.actionAddRecipeToRecipeList()
-            this.findNavController().navigate(action)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun bind(recipeWithIngredients: RecipeWithIngredients) {
-        val recipe = recipeWithIngredients.recipe
-        binding.apply {
-            recipeName.setText(recipe.recipeName, TextView.BufferType.SPANNABLE)
-            recipeImage.setImageURI(Uri.parse(recipe.recipeImageUri))
         }
     }
 

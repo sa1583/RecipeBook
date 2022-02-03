@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_recipe_list_to_add_recipe"
             app:destination="@id/addRecipeFragment" />
+        <action
+            android:id="@+id/action_recipeListFragment_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
     </fragment>
 
     <fragment
@@ -34,14 +37,25 @@
     <fragment
         android:id="@+id/addRecipeFragment"
         android:name="com.example.recipebook.ui.add.AddRecipeFragment"
-        android:label="@string/title_dashboard"
+        android:label="레시피 {action}"
         tools:layout="@layout/fragment_add_recipe">
         <action
             android:id="@+id/action_add_recipe_to_recipe_list"
-            app:destination="@id/recipeListFragment" />
+            app:destination="@id/recipeListFragment"
+            app:popUpTo="@id/recipeListFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="id"
             android:defaultValue="-1L"
             app:argType="long" />
+        <argument
+            android:name="action"
+            android:defaultValue="추가"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_addRecipeFragment_to_recipeDetailFragment"
+            app:destination="@id/recipeDetailFragment"
+            app:popUpTo="@id/recipeDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

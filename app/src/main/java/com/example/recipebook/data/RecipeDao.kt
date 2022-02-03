@@ -30,6 +30,6 @@ interface RecipeDao {
     @Delete
     suspend fun deleteRecipe(recipe: Recipe)
 
-    @Delete
-    suspend fun deleteIngredients(ingredientDBS: List<IngredientDB>)
+    @Query("DELETE FROM ingredient WHERE recipe_id = :recipeId")
+    suspend fun deleteIngredientsWithRecipeId(recipeId: Long)
 }

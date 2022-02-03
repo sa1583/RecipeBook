@@ -1,14 +1,13 @@
 package com.example.recipebook.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.recipebook.data.Ingredient
-import com.example.recipebook.data.IngredientDB
-import com.example.recipebook.data.RecipeDao
-import com.example.recipebook.data.RecipeWithIngredients
-import java.lang.IllegalArgumentException
+import com.example.recipebook.data.*
 
 class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
+    init {
+
+    }
+
     private fun getIngredient(recipeId: Long, name: String, amount: Int, unit: Int): Ingredient {
         return Ingredient(
             recipeId = recipeId,
@@ -25,7 +24,7 @@ class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     fun ingredientDBsToIngredients(ingredientDBs: List<IngredientDB>): List<Ingredient> {
         val ingredients = mutableListOf<Ingredient>()
         for (ingredientDB in ingredientDBs) {
-            Log.d("RecipeDetailViewModel", "${ingredientDB.id} ${ingredientDB.ingredientName}")
+            // Log.d("RecipeDetailViewModel", "${ingredientDB.id} ${ingredientDB.ingredientName}")
             ingredients.add(
                 getIngredient(
                     ingredientDB.recipeId,
@@ -35,7 +34,7 @@ class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
                 )
             )
         }
-        Log.d("RecipeDetailViewModel", ingredients.size.toString())
+        // Log.d("RecipeDetailViewModel", ingredients.size.toString())
         return ingredients
     }
 }

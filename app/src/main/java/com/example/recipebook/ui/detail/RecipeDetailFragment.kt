@@ -38,7 +38,7 @@ class RecipeDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ingredientsList.adapter = IngredientListAdapter()
+        binding.ingredientsList.adapter = IngredientListAdapter{}
         binding.ingredientsList.layoutManager = LinearLayoutManager(this.context)
         val id = navigationArs.recipeId
         viewModel.retrieveRecipe(id).observe(this.viewLifecycleOwner) { selectedRecipe ->
@@ -46,7 +46,7 @@ class RecipeDetailFragment : Fragment() {
             bind(recipeWithIngredients)
         }
         binding.btnModifyRecipe.setOnClickListener {
-            val action = RecipeDetailFragmentDirections.actionRecipeDetailToAddRecipe(id)
+            val action = RecipeDetailFragmentDirections.actionRecipeDetailToAddRecipe(id, "수정")
             findNavController().navigate(action)
         }
     }
@@ -57,7 +57,7 @@ class RecipeDetailFragment : Fragment() {
     }
 
     private fun bind(recipeWithIngredients: RecipeWithIngredients) {
-        val adapter = IngredientListAdapter()
+        val adapter = IngredientListAdapter{}
         val ingredients = viewModel.ingredientDBsToIngredients(recipeWithIngredients.ingredientDBList)
         binding.apply {
             recipeName.text = recipeWithIngredients.recipe.recipeName

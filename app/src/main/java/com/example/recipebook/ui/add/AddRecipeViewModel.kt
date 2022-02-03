@@ -1,6 +1,7 @@
 package com.example.recipebook.ui.add
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.recipebook.data.*
 import kotlinx.coroutines.launch
@@ -20,13 +21,17 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     fun addIngredients(ingredientDBList: List<IngredientDB>) {
         for (ingredientDB in ingredientDBList) {
             val ingredient = ingredientDBToIngredient(ingredientDB)
-            ingredients.add(ingredient)
+            addIngredient(ingredient)
         }
-        _ingredientList.value = ingredients
     }
 
     private fun addIngredient(ingredient: Ingredient) {
         ingredients.add(ingredient)
+        _ingredientList.value = ingredients
+    }
+
+    fun removeIngredients() {
+        ingredients.clear()
         _ingredientList.value = ingredients
     }
 
@@ -57,8 +62,9 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         )
     }
 
-    private fun getNewRecipe(recipeName: String, recipeImage: String): Recipe {
+    private fun getNewRecipe(id: Long, recipeName: String, recipeImage: String): Recipe {
         return Recipe(
+            id = id,
             recipeName = recipeName,
             recipeImageUri = recipeImage
         )
@@ -91,6 +97,15 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         }
     }
 
+    private fun updateRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            recipeDao.updateRecipe(recipe)
+            val ingredientDBs = setIngredientsRecipeId(recipe.id)
+            recipeDao.deleteIngredientsWithRecipeId(recipe.id)
+            recipeDao.addIngredients(ingredientDBs)
+        }
+    }
+
     fun retrieveRecipeWithIngredients(id: Long): LiveData<RecipeWithIngredients> {
         return recipeDao.getRecipeWithIngredients(id).asLiveData()
     }
@@ -99,8 +114,13 @@ class AddRecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         recipeName: String,
         recipeImageUri: String
     ) {
-        val recipe = getNewRecipe(recipeName, recipeImageUri)
+        val recipe = getNewRecipe(0L, recipeName, recipeImageUri)
         insertRecipeAndIngredient(recipe)
+    }
+
+    fun modifyRecipe(recipeName: String, recipeImageUri: String, id: Long) {
+        val recipe = getNewRecipe(id, recipeName, recipeImageUri)
+        updateRecipe(recipe)
     }
 
     fun addNewIngredient(name: String, amount: Int, unit: Int) {
