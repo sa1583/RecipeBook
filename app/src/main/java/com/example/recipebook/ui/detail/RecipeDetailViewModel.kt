@@ -2,12 +2,9 @@ package com.example.recipebook.ui.detail
 
 import androidx.lifecycle.*
 import com.example.recipebook.data.*
+import kotlinx.coroutines.launch
 
 class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
-    init {
-
-    }
-
     private fun getIngredient(recipeId: Long, name: String, amount: Int, unit: Int): Ingredient {
         return Ingredient(
             recipeId = recipeId,
@@ -21,10 +18,15 @@ class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         return recipeDao.getRecipeWithIngredients(id).asLiveData()
     }
 
+    fun deleteRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            recipeDao.deleteRecipe(recipe)
+        }
+    }
+
     fun ingredientDBsToIngredients(ingredientDBs: List<IngredientDB>): List<Ingredient> {
         val ingredients = mutableListOf<Ingredient>()
         for (ingredientDB in ingredientDBs) {
-            // Log.d("RecipeDetailViewModel", "${ingredientDB.id} ${ingredientDB.ingredientName}")
             ingredients.add(
                 getIngredient(
                     ingredientDB.recipeId,
@@ -34,7 +36,6 @@ class RecipeDetailViewModel(private val recipeDao: RecipeDao) : ViewModel() {
                 )
             )
         }
-        // Log.d("RecipeDetailViewModel", ingredients.size.toString())
         return ingredients
     }
 }
